@@ -47,6 +47,7 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
 
     private fun onError(message: String) {
         hideProgressBar()
+        Log.i("dev", message)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
