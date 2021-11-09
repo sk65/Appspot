@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Appspot</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">name:</string>
+    <string name="last_name">last name:</string>
+    <string name="age">age:</string>
+    <string name="gender">gender:</string>
+    <string name="country">country:</string>
+    <string name="something_goes_wrong">Something goes wrong</string>
+</resources>
