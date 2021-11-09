@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yefimoyevhen.appspot.database.model.User
-import com.yefimoyevhen.appspot.repository.Repository
+import com.yefimoyevhen.appspot.repository.AppspotRepository
 import com.yefimoyevhen.appspot.util.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserDetailsViewModel @Inject constructor(
-    private val repository: Repository
+    private val appspotRepository: AppspotRepository
 ) : ViewModel() {
 
     private val _dataState = MutableLiveData<DataState<User>>()
@@ -24,7 +24,7 @@ class UserDetailsViewModel @Inject constructor(
 
     fun findUserById(userId: String) {
         viewModelScope.launch {
-            repository.findUserById(userId)
+            appspotRepository.findUserById(userId)
                 .onEach { dataState ->
                     _dataState.value = dataState
                 }.launchIn(viewModelScope)

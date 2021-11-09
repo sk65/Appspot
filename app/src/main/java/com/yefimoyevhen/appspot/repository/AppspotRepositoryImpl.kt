@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class Repository @Inject constructor(
+class AppspotRepositoryImpl @Inject constructor(
     private val api: AppspotApi,
     private val dao: AppspotDao
-) {
+) : AppspotRepository {
 
-    suspend fun fetchData(): Flow<DataState<List<User>>> = flow {
+    override suspend fun fetchData(): Flow<DataState<List<User>>> = flow {
         emit(DataState.Loading)
         try {
             val users = ArrayList<User>()
@@ -37,7 +37,7 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun findAllUsers(): Flow<DataState<List<User>>> = flow {
+    override suspend fun findAllUsers(): Flow<DataState<List<User>>> = flow {
         emit(DataState.Loading)
         try {
             emit(DataState.Success(dao.findAllUsers()))
@@ -46,7 +46,7 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun findUserById(userId: String): Flow<DataState<User>> = flow {
+    override suspend fun findUserById(userId: String): Flow<DataState<User>> = flow {
         emit(DataState.Loading)
         try {
             emit(DataState.Success(dao.findUserById(userId)))

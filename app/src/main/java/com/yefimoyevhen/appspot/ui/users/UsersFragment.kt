@@ -1,7 +1,6 @@
 package com.yefimoyevhen.appspot.ui.users
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -29,14 +28,32 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        viewModel.dataState.observe(viewLifecycleOwner) { datastate ->
-            when (datastate) {
-                is DataState.Error -> onError(
-                    datastate.message ?: getString(R.string.something_goes_wrong)
-                )
-                is DataState.Loading -> showProgressBar()
-                is DataState.Success -> onSuccess(datastate.data)
-            }
+        subscribeObservers()
+        binding.refresh.setOnClickListener { viewModel.fetchData() }
+    }
+
+    private fun subscribeObservers() {
+        viewModel.dataState.observe(viewLifecycleOwner) { handleDataState(it) }
+        viewModel.isListEmpty.observe(viewLifecycleOwner) { showExplanation(it) }
+    }
+
+    private fun handleDataState(dataState: DataState<List<User>>?) {
+        when (dataState) {
+            is DataState.Error -> onError(
+                dataState.message ?: getString(R.string.something_goes_wrong)
+            )
+            is DataState.Loading -> showProgressBar()
+            is DataState.Success -> onSuccess(dataState.data)
+        }
+    }
+
+    private fun showExplanation(isUsersEmpty: Boolean) {
+        if (isUsersEmpty) {
+            binding.mock.visibility = View.VISIBLE
+            binding.refresh.visibility = View.VISIBLE
+        } else {
+            binding.mock.visibility = View.INVISIBLE
+            binding.refresh.visibility = View.INVISIBLE
         }
     }
 
@@ -47,7 +64,6 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
 
     private fun onError(message: String) {
         hideProgressBar()
-        Log.i("dev", message)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
