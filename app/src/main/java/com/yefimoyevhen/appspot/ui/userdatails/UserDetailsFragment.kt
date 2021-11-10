@@ -9,6 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.yefimoyevhen.appspot.R
 import com.yefimoyevhen.appspot.database.model.User
 import com.yefimoyevhen.appspot.databinding.FragmentUserDetailsBinding
+import com.yefimoyevhen.appspot.model.UserDTO
 import com.yefimoyevhen.appspot.ui.users.USER_ID_KEY
 import com.yefimoyevhen.appspot.util.DataState
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +39,7 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
         }
     }
 
-    private fun onSuccess(user: User) {
+    private fun onSuccess(user: UserDTO) {
         binding.apply {
             firstName.text = user.firstName
             lastName.text = user.lastName

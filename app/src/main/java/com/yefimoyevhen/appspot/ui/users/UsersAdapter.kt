@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yefimoyevhen.appspot.databinding.ItemUserBinding
 import com.yefimoyevhen.appspot.database.model.User
+import com.yefimoyevhen.appspot.model.UserDTO
 
 
 class UsersAdapter :
-    ListAdapter<User, UsersAdapter.UsersViewHolder>(ItemCallback) {
+    ListAdapter<UserDTO, UsersAdapter.UsersViewHolder>(ItemCallback) {
 
     var onItemClickListener: ((String) -> Unit)? = null
 
@@ -26,7 +27,7 @@ class UsersAdapter :
 
     inner class UsersViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(item: User) = with(binding) {
+        fun onBind(item: UserDTO) = with(binding) {
             firstName.text = item.firstName
             root.setOnClickListener {
                 onItemClickListener?.let { it(item.id) }
@@ -34,11 +35,11 @@ class UsersAdapter :
         }
     }
 
-    companion object ItemCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
+    companion object ItemCallback : DiffUtil.ItemCallback<UserDTO>() {
+        override fun areItemsTheSame(oldItem: UserDTO, newItem: UserDTO): Boolean =
             oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean =
+        override fun areContentsTheSame(oldItem: UserDTO, newItem: UserDTO): Boolean =
             oldItem == newItem
     }
 

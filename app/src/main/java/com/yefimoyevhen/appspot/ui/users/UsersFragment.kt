@@ -10,6 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.yefimoyevhen.appspot.R
 import com.yefimoyevhen.appspot.database.model.User
 import com.yefimoyevhen.appspot.databinding.FragmentUsersBinding
+import com.yefimoyevhen.appspot.model.UserDTO
 import com.yefimoyevhen.appspot.util.DataState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +38,7 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
         viewModel.isListEmpty.observe(viewLifecycleOwner) { showExplanation(it) }
     }
 
-    private fun handleDataState(dataState: DataState<List<User>>?) {
+    private fun handleDataState(dataState: DataState<List<UserDTO>>?) {
         when (dataState) {
             is DataState.Error -> onError(
                 dataState.message ?: getString(R.string.something_goes_wrong)
@@ -57,13 +58,14 @@ class UsersFragment : Fragment(R.layout.fragment_users) {
         }
     }
 
-    private fun onSuccess(users: List<User>) {
+    private fun onSuccess(users: List<UserDTO>) {
         hideProgressBar()
         adapter.submitList(users)
     }
 
     private fun onError(message: String) {
         hideProgressBar()
+        showExplanation(true)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 

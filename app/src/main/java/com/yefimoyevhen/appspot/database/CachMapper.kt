@@ -19,3 +19,12 @@ fun List<User>.toUserDTOList(): List<UserDTO> {
     }
     return users
 }
+
+fun User.toUserDTO() = UserDTO(
+    id,
+    age,
+    country,
+    firstName,
+    gender,
+    lastName
+)

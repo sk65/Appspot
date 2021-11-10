@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yefimoyevhen.appspot.database.model.User
+import com.yefimoyevhen.appspot.database.toUserDTOList
+import com.yefimoyevhen.appspot.model.UserDTO
 import com.yefimoyevhen.appspot.repository.AppspotRepository
 import com.yefimoyevhen.appspot.util.DataState
 import com.yefimoyevhen.appspot.util.InternetChecker
@@ -20,8 +22,8 @@ class UsersViewModel @Inject constructor(
     private val appspotRepository: AppspotRepository
 ) : ViewModel() {
 
-    private val _dataState = MutableLiveData<DataState<List<User>>>()
-    val dataState: LiveData<DataState<List<User>>>
+    private val _dataState = MutableLiveData<DataState<List<UserDTO>>>()
+    val dataState: LiveData<DataState<List<UserDTO>>>
         get() = _dataState
 
     private val _isListEmpty = MutableLiveData(false)
@@ -38,15 +40,26 @@ class UsersViewModel @Inject constructor(
                 appspotRepository.fetchData()
                     .onEach { dataState ->
                         setIsListEmpty(dataState)
-                        _dataState.value = dataState
+                        mapDataState(dataState)
                     }.launchIn(viewModelScope)
             } else {
                 appspotRepository.findAllUsers()
                     .onEach { dataState ->
                         setIsListEmpty(dataState)
-                        _dataState.value = dataState
+                        mapDataState(dataState)
                     }.launchIn(viewModelScope)
             }
+        }
+    }
+
+    private fun mapDataState(dataState: DataState<List<User>>) {
+        when (dataState) {
+            is DataState.Error -> _dataState.value =
+                DataState.Error(dataState.message)
+            is DataState.Loading -> _dataState.value =
+                DataState.Loading
+            is DataState.Success -> _dataState.value =
+                DataState.Success(dataState.data.toUserDTOList())
         }
     }
 
